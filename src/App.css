@@ -1,0 +1,48 @@
+.bkgroud{
+  position: relative; 
+  width:600px;
+  height:600px;
+  background:#505050;
+  margin:10px auto
+}
+
+.btnPosition {
+  width: 240px;
+  height: 160px;
+  position: absolute;
+  left: 950px;
+  top: 150px;
+  background:#ffffff;
+}
+
+.textPosition {
+  width: 200px;
+  height: 160px;
+  position: absolute;
+  left: 950px;
+  top: 350px;
+  background:#505050;
+}
+
+
+.btnClass{
+  width: 60px;
+  height: 40px;
+  margin-left: 10px;
+  margin-top: 10px;
+  background: #ffffff;
+  outline: none;
+  font-size:18px;
+  color:#000000;
+}
+
+.btnLongClass{
+  width: 220px;
+  height: 40px;
+  margin-left: 10px;
+  margin-top: 10px;
+  background: #ffffff;
+  outline: none;
+  font-size:18px;
+  color:#000000;
+}
