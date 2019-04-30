@@ -1,37 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-interface attr{
-  snakeArr:Array<number>;
-  canvasOnj:null;
-  snakeX:number;
-  snakeY:number;
-  foodX:number;
-  foodY:number;
-  distanceX:number;
-  distanceY:number;
-  speed:number;
-  width:number;
-  height:number;
-  flag:boolean;
-  keys:null;
-  direct:string;
+// interface attr{
+//   snakeArr:Array<number>;
+//   canvasOnj:null;
+//   snakeX:number;
+//   snakeY:number;
+//   foodX:number;
+//   foodY:number;
+//   distanceX:number;
+//   distanceY:number;
+//   speed:number;
+//   width:number;
+//   height:number;
+//   flag:boolean;
+//   keys:null;
+//   direct:string;
 
-}
+// }
 
 class App extends Component  {
 
   snakeX:number=201;
-  snakeY:number=201;
+  snakeY:number=201;//蛇的初始位置
   snakeArr:any=[];
-  foodX:number=401;
+  foodX:number=401;//食物的初始位置：x
   foodY:number=401;
-  canvasOnj:null;
-  distanceX:number=20;
+  canvasObj:any;
+  distanceX:number=20;//x行进的距离
   distanceY:number=0;
   speed:number=500;
   keys:any;
-  direct:string="left";
+  miniSize:number=20;
+  direct:string="left";//方向
   constructor(props:any){
   super(props);
    
@@ -63,12 +64,18 @@ class App extends Component  {
       x : this.snakeX,
       y : this.snakeY
   };
-  this.snakeArr.push(snakeHead);
-  drawSnake(this.snakeArr);//context.fillRect(x,y,width,height);
-  //绘制食物
-  canvasObj.fillStyle="#00ff00";
-  canvasObj.fillRect(this.foodX,this.foodY,miniSize-2,miniSize-2);
-  function drawSnake(snakeArr:any){
+
+
+this.snakeArr.push(snakeHead);
+this.drawSnake(this.snakeArr);//context.fillRect(x,y,width,height);
+//绘制食物
+canvasObj.fillStyle="#00ff00";
+canvasObj.fillRect(this.foodX,this.foodY,miniSize-2,miniSize-2);
+
+  }
+   drawSnake=(snakeArr:any)=>{
+    var canvasId:any = document.getElementById("canvasId");  
+    var canvasObj:any = canvasId.getContext("2d");
     for(var i=0;i<snakeArr.length;i++){
         var snake_ = snakeArr[i];
         if(i==snakeArr.length-1){
@@ -77,36 +84,34 @@ class App extends Component  {
             canvasObj.fillStyle="#ffffff";
         }
         
-        canvasObj.fillRect(snake_.x,snake_.y,miniSize-2,miniSize-2);
+        canvasObj.fillRect(snake_.x,snake_.y,this.miniSize-2,this.miniSize-2);
     }
     
 }
-
-
-  }
 //清除蛇方块
   clearSanke=(snakeArr:any)=>{ 
     var canvasId:any = document.getElementById("canvasId");  
     var canvasObj:any = canvasId.getContext("2d");
     var snake_ = snakeArr[0];
     snakeArr.splice(0,1);
-    canvasObj.clearRect(snake_.x,snake_.y,miniSize-2,miniSize-2);  
+    canvasObj.clearRect(snake_.x,snake_.y,this.miniSize-2,this.miniSize-2);  
   }  
 //绘制食物方块
-  drawFood=(miniSize:number=20)=>{    
+  drawFood=()=>{    
   var canvasId:any = document.getElementById("canvasId");  
   var canvasObj:any = canvasId.getContext("2d");
-    this.foodX = parseInt(String(40*Math.random()))*miniSize+1;
-    this.foodY = parseInt(String(30*Math.random()))*miniSize+1;
+    this.foodX = parseInt(String(30*Math.random()))*this.miniSize+1;
+    this.foodY = parseInt(String(30*Math.random()))*this.miniSize+1;
     
     canvasObj.fillStyle="#00ff00";
-    canvasObj.fillRect(this.foodX,this.foodY,miniSize-2,miniSize-2);
+    canvasObj.fillRect(this.foodX,this.foodY,this.miniSize-2,this.miniSize-2);
 }
  startMove(){
-  //document.getElementById("slow").setAttribute("disabled", true);
-  //document.getElementById("fast").setAttribute("disabled", true);
   let timer = setInterval(()=>{
-
+// if(this.snakeX+19 == 0 || this.snakeX-1 == 600 ||this.snakeY+19 == 0 || this.snakeY-1 == 600){
+//     alert("死了");
+//     return;    
+// }
       if(this.snakeX == this.foodX && this.snakeY == this.foodY){//判断是否碰撞食物
           
           //重新绘制食物
@@ -119,7 +124,7 @@ class App extends Component  {
               y :this.snakeY
           };
           this.snakeArr.push(snake_);  
-          this.init.drawSnake(this.snakeArr);
+          this.drawSnake(this.snakeArr);
 
       }else{
           
@@ -134,44 +139,50 @@ class App extends Component  {
           };
                                   
           this.snakeArr.push(snake_);  
-          this.init.drawSnake(this.snakeArr);
+          this.drawSnake(this.snakeArr);
       }
   },this.speed);
 }
-document.onkeydown=function(event) {
-  //pauseGames();
-  keys = event.keyCode;  
-  switch(keys){               
-      case 37://方向键(←)： VK_LEFT (37)  
-          if(direct != "right"){
-              fwdx = -20;
-              fwdy = 0;   
-              direct = "left";
-          }                   
-          break;
-      case 38://方向键(↑)： VK_UP (38)
-          if(direct != "down"){
-              fwdx = 0;
-              fwdy = -20;
-              direct = "up";
-          }
-          break;
-      case 39://方向键(→)： VK_RIGHT (39)
-          if(direct != "left"){
-              fwdx = 20;
-              fwdy = 0;
-              direct = "right";
-          }
-          break;
-      case 40://方向键(↓)： VK_DOWN (40)
-          if(direct != "up"){
-              fwdx = 0;
-              fwdy = 20;
-              direct = "down";
-          }
-          break;
-  }    
+
+onkeydown=(event:any)=> {
+    
+    switch(event.keyCode){               
+        case 37:
+            if(this.direct != "right"){
+                this.distanceX = -20;
+                this.distanceY = 0;   
+                this.direct = "left";
+            }                   
+            break;
+        case 38:
+            if(this.direct != "down"){
+                this.distanceX = 0;
+                this.distanceY = -20;
+                this.direct = "up";
+            }
+            break;
+        case 39:
+            if(this.direct != "left"){
+                this.distanceX = 20;
+                this.distanceY = 0;
+                this.direct = "right";
+            }
+            break;
+        case 40:
+            if(this.direct != "up"){
+                this.distanceX = 0;
+                this.distanceY = 20;
+                this.direct = "down";
+            }
+        case 13:
+        {
+            this.startMove();
+        }
+            break;
+    }    
+}
   componentDidMount(){
+    document.addEventListener("keydown", this.onkeydown)
     this.init();
   }
   render() {
